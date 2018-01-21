@@ -3,6 +3,7 @@ import math
 from PIL import Image
 import urllib2
 import cStringIO
+import numpy as np
 
 class GoogleMapDownloader:
     """
@@ -60,13 +61,17 @@ class GoogleMapDownloader:
     def saveImage(self,name):
         imgdata = urllib2.urlopen(self.generateUrl()).read()
         img = Image.open(cStringIO.StringIO(imgdata))
+        img.info["mew"]="lol"
         img.save(name)
 
 
 def main():
-
-    gmd = GoogleMapDownloader(77.5506375,8.086391, 20)
-    gmd.saveImage("id1.jpeg")
+    data = np.genfromtxt('dataset.csv', delimiter=',', names=True)
+    i=0
+    zoom=19
+    for i in xrange(20):
+        gmd = GoogleMapDownloader(data[i]['long'],data[i]['lat'], zoom)
+        gmd.saveImage(str(int(data[i]['class']))+str(int(data[i]['name']))+".jpeg")
 
 
 
