@@ -74,11 +74,13 @@ def main1():
     data = np.genfromtxt('dataset.csv', delimiter=',', names=True)
     i=0
     zoom=20
-    mypath = '.'
-    files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-    # for i in xrange(10000,21000):
+    mypath = 'images/1/'
+    files = [('images/1/'+ f) for f in listdir(mypath) if isfile(join(mypath, f))]
+    mypath = 'images/2/'
+    files2 = [('images/2/'+ f) for f in listdir(mypath) if isfile(join(mypath, f))]
+    files.extend(files2)
     whoops = 0
-    for i in xrange(21000):
+    for i in xrange(10000,21000):
         name = 'images/' + str(int(data[i]['class'])) + '/' + str(int(data[i]['name'])) + ".jpeg"
         if (name in files):
             print name, ' already done'
