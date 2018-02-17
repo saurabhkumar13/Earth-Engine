@@ -59,20 +59,48 @@ class GoogleMapDownloader:
         return url
 
     def saveImage(self,name):
+        # print(self.generateUrl())
         imgdata = urllib2.urlopen(self.generateUrl()).read()
         img = Image.open(cStringIO.StringIO(imgdata))
         img.info["mew"]="lol"
         img.save(name)
 
 
-def main():
+from os import listdir
+from os.path import isfile, join
+
+
+def main1():
     data = np.genfromtxt('dataset.csv', delimiter=',', names=True)
     i=0
-    zoom=19
-    for i in xrange(20):
-        gmd = GoogleMapDownloader(data[i]['long'],data[i]['lat'], zoom)
-        gmd.saveImage(str(int(data[i]['class']))+str(int(data[i]['name']))+".jpeg")
+    zoom=20
+    mypath = '.'
+    files = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+    # for i in xrange(10000,21000):
+    whoops = 0
+    for i in xrange(21000):
+        name = 'images/' + str(int(data[i]['class'])) + '/' + str(int(data[i]['name'])) + ".jpeg"
+        if (name in files):
+            print name, ' already done'
+            continue
+        if whoops>10:
+            print 'bro change VPN server'
+            break
+        gmd = GoogleMapDownloader(data[i]['long'], data[i]['lat'], zoom)
+        try:
+            gmd.saveImage(name)
+            print name, ' done'
+        except:
+            print "whoops"
+            whoops += 1
+            continue
 
+# def main2():
+#     data = np.genfromtxt('bu_pts.csv', delimiter=',', names=True)
+#     i=0
+#     zoom=19
+#     for i in xrange(200):
+#         gmd = GoogleMapDownloader(data[i]['long'],data[i]['lat'], zoom)
+#         gmd.saveImage(str(int(data[i]['id']))+".jpeg")
 
-
-main()
+main1()
